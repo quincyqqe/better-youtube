@@ -1,0 +1,483 @@
+/* ==UserStyle==
+@name           Better YouTube by sxcred
+@namespace      github.com/openstyles/stylus
+@version        1.2.2
+@description    Redesign for YouTube
+@author         sxcred
+@preprocessor   stylus
+
+@var checkbox   hideNotification    "Hide notification icon"          0
+@var checkbox   hideCountryCode     "Hide country code"               1
+@var checkbox   customScrollbar     "Custom scrollbar"                1
+@var checkbox   customProgressBar   "Custom progress bar"             1
+@advanced dropdown yt_bg "YouTube Background" {
+  1 "Spheres" <<<EOT url("https://4kwallpapers.com/images/walls/thumbs_2t/26343.jpg") EOT;
+  2 "Saber Alter 1" <<<EOT url("https://images7.alphacoders.com/818/thumb-1920-818474.jpg") EOT;
+  3 "Saber Alter 2" <<<EOT url("https://images6.alphacoders.com/875/thumb-1920-875816.png")  EOT;
+  4 "Saber Alter 3" <<<EOT url("https://images6.alphacoders.com/140/thumb-1920-1406350.png")  EOT; 
+  5 "Default" <<<EOT none EOT;
+  6 "Custom (Use link below)" <<<EOT url(customBgLink) EOT;
+}
+@var text       customBgLink        "Custom Background Link (KEEP QUOTES)"  "'https://example.com/image.jpg'"
+==/UserStyle== */
+
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap");
+
+@-moz-document domain("youtube.com") {
+  :root {
+    --ytd-font-family: "Nunito", "Segoe UI", sans-serif !important;
+    --ytd-app-font-family: "Nunito", "Segoe UI", sans-serif !important;
+
+    --yt-search-glass-bg: rgba(15, 15, 20, 0.45);
+    --yt-search-glass-bg-strong: rgba(18, 18, 26, 0.75);
+    --yt-search-glass-border: rgba(255, 255, 255, 0.08);
+    --yt-search-glass-border-focus: rgba(143, 209, 255, 0.4);
+    --yt-search-glass-shadow:
+      0 10px 30px rgba(0, 0, 0, 0.25), 0 1px 8px rgba(0, 0, 0, 0.15);
+    --yt-search-text: #f7f9fc;
+    --yt-search-placeholder: rgba(247, 249, 252, 0.5);
+    --yt-search-accent: #8fd1ff;
+    --yt-search-hover: rgba(255, 255, 255, 0.07);
+
+    --smooth-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  html,
+  body,
+  ytd-app,
+  yt-formatted-string,
+  input,
+  textarea,
+  .yt-spec-button-shape-next {
+    font-family: "Nunito", "Segoe UI", sans-serif !important;
+  }
+
+  /* Responsive Video Grid Optimization */
+  ytd-rich-grid-renderer {
+    --ytd-rich-grid-items-per-row: 4 !important;
+    --ytd-rich-grid-posts-per-row: 4 !important;
+  }
+
+  @media (max-width: 1800px) {
+    ytd-rich-grid-renderer {
+      --ytd-rich-grid-items-per-row: 3 !important;
+    }
+  }
+
+  @media (max-width: 1400px) {
+    ytd-rich-grid-renderer {
+      --ytd-rich-grid-items-per-row: 2 !important;
+    }
+  }
+
+  #footer,
+  #dismissible {
+    display: none !important;
+  }
+
+  /* === Sidebar (Navigation) === */
+  ytd-guide-section-renderer {
+    padding: 4px 8px !important;
+  }
+
+  ytd-guide-entry-renderer a#endpoint {
+    border-radius: 12px !important;
+    padding: 8px 12px !important;
+    transition:
+      background 0.2s var(--smooth-ease),
+      box-shadow 0.2s var(--smooth-ease),
+      transform 0.2s var(--smooth-ease) !important;
+  }
+
+  ytd-guide-entry-renderer a#endpoint:hover {
+    background: rgba(255, 255, 255, 0.06) !important;
+    transform: translateX(2px);
+  }
+
+  ytd-guide-entry-renderer[active] a#endpoint {
+    background: rgba(255, 255, 255, 0.12) !important;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05) !important;
+  }
+
+  ytd-guide-entry-renderer yt-formatted-string {
+    color: #e6eaf2 !important;
+    font-weight: 500 !important;
+  }
+
+  ytd-guide-entry-renderer yt-icon {
+    opacity: 0.8;
+    transition:
+      opacity 0.2s var(--smooth-ease),
+      transform 0.2s var(--smooth-ease);
+  }
+
+  ytd-guide-entry-renderer:hover yt-icon {
+    opacity: 1;
+  }
+
+  ytd-guide-section-renderer:not(:last-child) {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    margin-bottom: 8px !important;
+  }
+
+  /* === Header === */
+  #background.ytd-masthead {
+    background: rgba(10, 10, 15, 0.6) !important;
+    backdrop-filter: blur(20px) saturate(160%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    transform: translateZ(0);
+    will-change: transform;
+  }
+
+  #masthead-container,
+  ytd-masthead {
+    background: rgba(0, 0, 0, 0.15) !important;
+    border-bottom: 1px solid transparent !important;
+    transition: background 0.3s var(--smooth-ease) !important;
+  }
+
+  /* === Search Bar === */
+  .ytSearchboxComponentInputBox,
+  .ytSearchboxComponentInputBoxDark {
+    min-height: 38px !important;
+    border: 1px solid var(--yt-search-glass-border) !important;
+    border-radius: 24px !important;
+    background:
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.03),
+        rgba(255, 255, 255, 0.01)
+      ),
+      var(--yt-search-glass-bg) !important;
+    box-shadow: var(--yt-search-glass-shadow) !important;
+    transition:
+      border-color 0.25s var(--smooth-ease),
+      box-shadow 0.25s var(--smooth-ease),
+      transform 0.25s var(--smooth-ease),
+      background 0.25s var(--smooth-ease) !important;
+  }
+
+  .ytSearchboxComponentInputBox:focus-within,
+  .ytSearchboxComponentInputBoxDark:focus-within {
+    border-color: var(--yt-search-glass-border-focus) !important;
+    background: var(--yt-search-glass-bg-strong) !important;
+    box-shadow:
+      0 0 0 1px rgba(143, 209, 255, 0.15),
+      0 15px 35px rgba(0, 0, 0, 0.35),
+      0 0 25px rgba(143, 209, 255, 0.08) !important;
+    transform: translateY(-1px) !important;
+  }
+
+  .ytSearchboxComponentInput::placeholder {
+    color: var(--yt-search-placeholder) !important;
+  }
+
+  /* Minimalist Polish: Hide unneeded buttons */
+  .ytSearchboxComponentSearchButton,
+  .ytSearchboxComponentSearchButtonDark,
+  #search-button,
+  #search-button-narrow,
+  #voice-search-button,
+  ytd-button-renderer.ytd-masthead[button-renderer][button-next],
+  button[aria-label="Ask"] {
+    display: none !important;
+  }
+
+  /* === Search Dropdown Suggestions === */
+  .ytSearchboxComponentSuggestionsContainer,
+  .ytSearchboxComponentSuggestionsContainerDark {
+    margin-top: 12px !important;
+    border: 1px solid rgba(255, 255, 255, 0.07) !important;
+    border-radius: 20px !important;
+    background: rgba(12, 12, 18, 0.85) !important;
+    backdrop-filter: blur(25px) !important;
+    -webkit-backdrop-filter: blur(25px) !important;
+    box-shadow:
+      0 20px 45px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+    overflow: hidden !important;
+  }
+
+  .ytSuggestionComponentSuggestion {
+    margin: 4px 8px !important;
+    border-radius: 12px !important;
+    transition:
+      background-color 0.2s var(--smooth-ease),
+      transform 0.2s var(--smooth-ease) !important;
+  }
+
+  .ytSuggestionComponentSuggestion:hover,
+  .ytSuggestionComponentSuggestion[focused] {
+    background: var(--yt-search-hover) !important;
+  }
+
+  .ytSuggestionComponentText {
+    color: var(--yt-search-text) !important;
+  }
+  .ytSuggestionComponentBold {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+  }
+  .ytSuggestionComponentIcon,
+  .ytSuggestionComponentClearButtonIcon {
+    opacity: 0.7 !important;
+  }
+  .ytSuggestionComponentVisualSuggestThumbnail {
+    border-radius: 8px !important;
+  }
+
+  /* === Video Description Panels === */
+  #description.ytd-watch-metadata {
+    background-color: rgba(15, 15, 20, 0.5) !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    border-radius: 20px !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3) !important;
+    padding: 14px !important;
+    transform: translateZ(0);
+  }
+
+  ytd-watch-metadata a {
+    color: #63d0fc !important;
+    text-decoration: none !important;
+  }
+  ytd-watch-metadata a:hover {
+    color: #bfe6ff !important;
+    text-shadow: 0 0 8px rgba(143, 209, 255, 0.3);
+  }
+
+  /* === Sidebar & Containers Layout updates === */
+  ytd-watch-next-secondary-results-renderer,
+  ytd-compact-autoplay-renderer,
+  ytd-playlist-panel-renderer {
+    background-color: rgba(15, 15, 20, 0.4) !important;
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border-radius: 20px !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3) !important;
+    padding: 12px !important;
+    overflow: hidden !important;
+    transform: translateZ(0);
+  }
+
+  #container.ytd-playlist-panel-renderer {
+    border: none !important;
+  }
+  ytd-playlist-panel-renderer[collapsible][collapsed][use-color-palette]
+    .header.ytd-playlist-panel-renderer,
+  .header.ytd-playlist-panel-renderer {
+    background-color: transparent !important;
+  }
+
+  ytd-compact-video-renderer {
+    border-radius: 12px !important;
+    transition:
+      background 0.2s var(--smooth-ease),
+      transform 0.2s var(--smooth-ease) !important;
+    padding: 4px !important;
+  }
+
+  ytd-compact-video-renderer:hover {
+    background: rgba(255, 255, 255, 0.04) !important;
+    transform: translateX(4px) !important;
+  }
+
+  ytd-playlist-panel-video-renderer {
+    border-radius: 12px !important;
+    padding: 8px !important;
+    margin-bottom: 4px !important;
+    transition: all 0.2s var(--smooth-ease) !important;
+  }
+
+  ytd-playlist-panel-video-renderer:hover {
+    background: rgba(255, 255, 255, 0.05) !important;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
+  }
+
+  ytd-playlist-panel-video-renderer[selected] {
+    background: rgba(255, 255, 255, 0.09) !important;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+  }
+
+  #index-container,
+  #reorder {
+    opacity: 0 !important;
+    width: 0 !important;
+  }
+  ytd-playlist-panel-video-renderer ytd-thumbnail {
+    border-radius: 10px !important;
+    overflow: hidden !important;
+  }
+
+  #video-title {
+    font-size: 13.5px !important;
+    font-weight: 600 !important;
+    color: #eaf2ff !important;
+    transition: color 0.2s ease;
+  }
+
+  ytd-playlist-panel-video-renderer:hover #video-title {
+    color: #8fd1ff !important;
+  }
+  #byline {
+    font-size: 11.5px !important;
+    opacity: 0.65 !important;
+  }
+  ytd-playlist-panel-video-renderer:hover #byline {
+    opacity: 0.95 !important;
+  }
+  #container.ytd-playlist-panel-video-renderer {
+    display: flex !important;
+    gap: 12px !important;
+    align-items: center !important;
+  }
+  #meta {
+    padding-right: 4px !important;
+  }
+  .ytp-time-status,
+  #text.ytd-thumbnail-overlay-time-status-renderer {
+    font-size: 11px !important;
+    opacity: 0.85 !important;
+  }
+
+  /* Conditional Features Configuration */
+  if hideNotification {
+    ytd-notification-topbar-button-renderer {
+      display: none !important;
+    }
+  }
+  if hideCountryCode {
+    #country-code {
+      display: none !important;
+    }
+  }
+
+  if customScrollbar {
+    html,
+    * {
+      scrollbar-width: thin !important;
+      scrollbar-color: rgba(255, 255, 255, 0.12) rgba(0, 0, 0, 0.1) !important;
+    }
+    ::-webkit-scrollbar {
+      width: 8px !important;
+      height: 8px !important;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.1) !important;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.12) !important;
+      border-radius: 10px;
+      border: 2px solid transparent;
+      background-clip: content-box;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.25) !important;
+      background-clip: content-box;
+    }
+  }
+
+  if customProgressBar {
+    .ytp-progress-bar {
+      height: 5px !important;
+      background: rgba(255, 255, 255, 0.08) !important;
+      overflow: visible;
+      transition: height 0.2s cubic-bezier(0.25, 1, 0.5, 1) !important;
+    }
+    .ytp-progress-bar:hover {
+      height: 6px !important;
+    }
+    .ytp-play-progress {
+      background: linear-gradient(90deg, #4d62ff, #00d2ff) !important;
+
+      box-shadow: 0 4px 20px rgba(0, 210, 255, 0.4);
+    }
+    .ytp-load-progress {
+      background: rgba(255, 255, 255, 0.18) !important;
+    }
+    .ytp-scrubber-button {
+      width: 10px !important;
+      height: 10px !important;
+      background: #00d2ff !important;
+      border-radius: 50%;
+
+      box-shadow:
+        0 0 15px #00d2ff,
+        0 0 30px #4d62ff;
+      transform: scale(0) !important;
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    }
+    .ytp-progress-bar:hover .ytp-scrubber-button {
+      transform: scale(1.2) !important;
+    }
+  }
+
+  /* === Layout Flow Corrections === */
+  #background.ytd-app {
+    display: none !important;
+  }
+  tp-yt-app-drawer {
+    background: transparent !important;
+  }
+
+  html::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background: yt_bg;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: brightness(0.4) contrast(1.02) saturate(0.95);
+  }
+
+  html::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(
+        circle at 50% 15%,
+        rgba(255, 255, 255, 0.04),
+        transparent 65%
+      ),
+      linear-gradient(
+        180deg,
+        rgba(10, 10, 14, 0.5) 0%,
+        rgba(10, 10, 14, 0.85) 50%,
+        rgba(8, 8, 12, 0.98) 100%
+      );
+  }
+
+  ytd-app,
+  #primary,
+  #secondary,
+  ytd-watch-flexy {
+    background: transparent !important;
+  }
+
+  ytd-watch-flexy {
+    position: relative;
+  }
+  ytd-watch-flexy::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 250px;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      rgba(10, 10, 14, 0.75),
+      rgba(10, 10, 14, 0.3),
+      transparent
+    );
+  }
+}
+
+.ytVideoMetadataCarouselViewModelCarouselContainer {
+  overflow: hidden;
+}
