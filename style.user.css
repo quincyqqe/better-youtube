@@ -70,8 +70,7 @@
     }
   }
 
-  #footer,
-  #dismissible {
+  #footer{
     display: none !important;
   }
 
